@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\DashboardAdminController;
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -14,10 +16,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [HomeController::class, 'index_home'])->name('index_home');
+Route::get('/category', [HomeController::class, 'categori_home'])->name('categori_home');
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::middleware('auth', 'checkroll:admin')->group(function () {
+    Route::get('/dashboard-admin', [DashboardAdminController::class, 'dashboard_admin'])->name('dashboard_admin');
+});
